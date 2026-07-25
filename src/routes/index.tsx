@@ -472,32 +472,27 @@ function ReviewSnapshot() {
 
 function Dashboard() {
   return (
-    <div className="min-h-screen flex bg-background text-foreground">
-      <Sidebar />
-      <main className="flex-1 min-w-0">
-        <Topbar />
-        <div className="px-8 pb-16 space-y-6 max-w-[1400px]">
-          <div className="flex items-baseline justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Good morning, Lin</p>
-              <h1 className="font-display text-4xl tracking-tight">
-                Let's close the gap to <span className="text-brand">Band 8</span>.
-              </h1>
-            </div>
-          </div>
-
-          <HeroCard />
-
-          <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-            <DailyPlan />
-            <ProgressCard />
-          </div>
-
-          <FeatureCards />
-
-          <ReviewSnapshot />
+    <AppShell crumb="Home">
+      <div className="flex items-baseline justify-between">
+        <div>
+          <p className="text-sm text-muted-foreground">Good morning, Lin</p>
+          <h1 className="font-display text-4xl tracking-tight">
+            Let's close the gap to <span className="text-brand">Band 8</span>.
+          </h1>
         </div>
-      </main>
-    </div>
+      </div>
+
+      <HeroCard />
+
+      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+        <DailyPlan />
+        <ProgressCard />
+      </div>
+
+      <FeatureCards />
+
+      <ReviewSnapshot />
+    </AppShell>
   );
 }
+
