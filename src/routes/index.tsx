@@ -1,26 +1,21 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import {
   Mic,
   BookOpen,
   Layers,
-  Flame,
   Target,
   ArrowUpRight,
   ArrowRight,
   Clock,
-  Sparkles,
   NotebookPen,
   GraduationCap,
-  Home,
-  Headphones,
   RotateCcw,
-  Settings,
-  Search,
   CheckCircle2,
   Circle,
-  ChevronRight,
   TrendingUp,
 } from "lucide-react";
+import { AppShell } from "@/components/app-shell";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
