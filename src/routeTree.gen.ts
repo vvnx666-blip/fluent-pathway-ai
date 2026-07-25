@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReviewRouteImport } from './routes/review'
 import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as MockRouteImport } from './routes/mock'
-import { Route as BankRouteImport } from './routes/bank'
 import { Route as IndexRouteImport } from './routes/index'
 
 const ReviewRoute = ReviewRouteImport.update({
@@ -30,11 +29,6 @@ const MockRoute = MockRouteImport.update({
   path: '/mock',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BankRoute = BankRouteImport.update({
-  id: '/bank',
-  path: '/bank',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,14 +37,12 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/bank': typeof BankRoute
   '/mock': typeof MockRoute
   '/practice': typeof PracticeRoute
   '/review': typeof ReviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/bank': typeof BankRoute
   '/mock': typeof MockRoute
   '/practice': typeof PracticeRoute
   '/review': typeof ReviewRoute
@@ -58,22 +50,20 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/bank': typeof BankRoute
   '/mock': typeof MockRoute
   '/practice': typeof PracticeRoute
   '/review': typeof ReviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bank' | '/mock' | '/practice' | '/review'
+  fullPaths: '/' | '/mock' | '/practice' | '/review'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bank' | '/mock' | '/practice' | '/review'
-  id: '__root__' | '/' | '/bank' | '/mock' | '/practice' | '/review'
+  to: '/' | '/mock' | '/practice' | '/review'
+  id: '__root__' | '/' | '/mock' | '/practice' | '/review'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BankRoute: typeof BankRoute
   MockRoute: typeof MockRoute
   PracticeRoute: typeof PracticeRoute
   ReviewRoute: typeof ReviewRoute
@@ -102,13 +92,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MockRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/bank': {
-      id: '/bank'
-      path: '/bank'
-      fullPath: '/bank'
-      preLoaderRoute: typeof BankRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -121,7 +104,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BankRoute: BankRoute,
   MockRoute: MockRoute,
   PracticeRoute: PracticeRoute,
   ReviewRoute: ReviewRoute,
