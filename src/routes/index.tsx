@@ -1,21 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   Mic,
-  BookOpen,
   Layers,
   Target,
   ArrowUpRight,
   ArrowRight,
-  Clock,
   NotebookPen,
   GraduationCap,
   RotateCcw,
-  CheckCircle2,
-  Circle,
   TrendingUp,
+  Pencil,
+  Minus,
+  Plus,
+  Check,
+  type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,15 +39,17 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-
-
-
 /* --------------------------- Hero / Target ----------------------------- */
 
 function HeroCard() {
+  const { t } = useI18n();
   const current = 6.5;
-  const target = 8.0;
-  const progress = ((current - 5) / (target - 5)) * 100;
+  const [target, setTarget] = useState(8.0);
+  const [editing, setEditing] = useState(false);
+  const progress = Math.max(0, Math.min(100, ((current - 5) / (target - 5)) * 100));
+
+  const bump = (delta: number) =>
+    setTarget((v) => Math.max(5, Math.min(9, Math.round((v + delta) * 2) / 2)));
 
   return (
     <section className="relative overflow-hidden rounded-2xl bg-foreground text-background p-8">
@@ -54,25 +58,53 @@ function HeroCard() {
 
       <div className="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
         <div className="max-w-xl">
-          <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-background/60">
-            <Target className="w-3 h-3" /> Target band
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-background/60">
+              <Target className="w-3 h-3" /> {t("hero.targetBand")}
+            </div>
+            <button
+              onClick={() => setEditing((v) => !v)}
+              className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-background/60 hover:text-background border border-background/15 rounded-full h-5 px-2"
+            >
+              {editing ? <Check className="w-3 h-3" /> : <Pencil className="w-3 h-3" />}
+              {editing ? t("hero.saveTarget") : t("hero.editTarget")}
+            </button>
           </div>
-          <h1 className="mt-3 font-display text-6xl md:text-7xl leading-[0.95]">
-            Band <span className="text-brand">{target.toFixed(1)}</span>
-            <span className="text-background/40">/ 9.0</span>
-          </h1>
+
+          <div className="mt-3 flex items-end gap-3">
+            <h1 className="font-display text-6xl md:text-7xl leading-[0.95]">
+              Band <span className="text-brand tabular-nums">{target.toFixed(1)}</span>
+              <span className="text-background/40">/ 9.0</span>
+            </h1>
+            {editing && (
+              <div className="flex items-center gap-1 mb-3">
+                <button
+                  onClick={() => bump(-0.5)}
+                  className="w-8 h-8 rounded-md border border-background/20 grid place-items-center hover:bg-background/10"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => bump(0.5)}
+                  className="w-8 h-8 rounded-md border border-background/20 grid place-items-center hover:bg-background/10"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+
           <p className="mt-4 text-sm text-background/70 leading-relaxed">
-            You're at <span className="text-background font-medium">{current}</span> — {" "}
-            <span className="text-brand">1.5 bands</span> to close. Keep 45 minutes a day
-            and you'll hit target by <span className="text-background">Mar 14</span>.
+            {t("hero.currentBand")}{" "}
+            <span className="text-background font-medium">{current}</span> · {t("hero.copy")}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
             <button className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-brand text-brand-foreground text-sm font-medium hover:brightness-105 transition">
-              Start today's plan <ArrowRight className="w-4 h-4" />
+              {t("hero.startPlan")} <ArrowRight className="w-4 h-4" />
             </button>
             <button className="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-background/15 text-sm font-medium hover:bg-background/5 transition">
-              <Mic className="w-4 h-4" /> Quick practice
+              <Mic className="w-4 h-4" /> {t("hero.quickPractice")}
             </button>
           </div>
         </div>
@@ -80,28 +112,25 @@ function HeroCard() {
         <div className="lg:w-80 shrink-0 space-y-4">
           <div>
             <div className="flex items-center justify-between text-xs text-background/60 mb-2">
-              <span>Progress to target</span>
+              <span>{t("hero.progressToTarget")}</span>
               <span className="tabular-nums text-background">{Math.round(progress)}%</span>
             </div>
             <div className="h-1.5 rounded-full bg-background/10 overflow-hidden">
-              <div
-                className="h-full bg-brand rounded-full"
-                style={{ width: `${progress}%` }}
-              />
+              <div className="h-full bg-brand rounded-full" style={{ width: `${progress}%` }} />
             </div>
             <div className="mt-1 flex justify-between text-[10px] text-background/40 tabular-nums">
               <span>5.0</span>
-              <span>6.5</span>
-              <span>8.0</span>
+              <span>{current.toFixed(1)}</span>
+              <span>{target.toFixed(1)}</span>
               <span>9.0</span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <MiniStat label="Fluency" value="6.5" trend="+0.5" />
-            <MiniStat label="Lexical" value="7.0" trend="+0.5" />
-            <MiniStat label="Grammar" value="6.0" trend="+0.0" flat />
-            <MiniStat label="Pronun." value="6.5" trend="+0.5" />
+            <MiniStat label={t("hero.fluency")} value="6.5" trend="+0.5" />
+            <MiniStat label={t("hero.lexical")} value="7.0" trend="+0.5" />
+            <MiniStat label={t("hero.grammar")} value="6.0" trend="+0.0" flat />
+            <MiniStat label={t("hero.pron")} value="6.5" trend="+0.5" />
           </div>
         </div>
       </div>
@@ -125,11 +154,7 @@ function MiniStat({
       <div className="text-[10px] uppercase tracking-wider text-background/50">{label}</div>
       <div className="mt-1 flex items-baseline justify-between">
         <span className="font-display text-2xl">{value}</span>
-        <span
-          className={`text-[10px] tabular-nums ${
-            flat ? "text-background/40" : "text-brand"
-          }`}
-        >
+        <span className={`text-[10px] tabular-nums ${flat ? "text-background/40" : "text-brand"}`}>
           {trend}
         </span>
       </div>
@@ -137,116 +162,84 @@ function MiniStat({
   );
 }
 
-/* ------------------------------ Daily Plan ----------------------------- */
+/* --------------------------- Quick Actions ----------------------------- */
 
-const plan = [
-  {
-    id: 1,
-    title: "Warm-up: Part 1 — Hometown",
-    meta: "5 questions · 6 min",
-    icon: Mic,
-    done: true,
-    tag: "Speaking",
-  },
-  {
-    id: 2,
-    title: "Cue card: A skill you'd like to learn",
-    meta: "Part 2 · 3 min",
-    icon: NotebookPen,
-    done: true,
-    tag: "Part 2",
-  },
-  {
-    id: 3,
-    title: "Mock test — Full simulation",
-    meta: "AI examiner · ~14 min",
-    icon: GraduationCap,
-    done: false,
-    tag: "Mock",
-    accent: true,
-  },
-  {
-    id: 4,
-    title: "Review 8 new vocabulary items",
-    meta: "Flashcards · 4 min",
-    icon: Layers,
-    done: false,
-    tag: "Review",
-  },
-  {
-    id: 5,
-    title: "Fix 3 mistakes from yesterday",
-    meta: "Notebook · 5 min",
-    icon: RotateCcw,
-    done: false,
-    tag: "Review",
-  },
-];
+function QuickActions() {
+  const { t } = useI18n();
+  const items: {
+    icon: LucideIcon;
+    title: string;
+    desc: string;
+    href: string;
+    accent?: boolean;
+  }[] = [
+    {
+      icon: Mic,
+      title: t("plan.quick.title"),
+      desc: t("plan.quick.desc"),
+      href: "/practice",
+      accent: true,
+    },
+    {
+      icon: Layers,
+      title: t("plan.vocab.title"),
+      desc: t("plan.vocab.desc"),
+      href: "/review",
+    },
+    {
+      icon: NotebookPen,
+      title: t("plan.mistakes.title"),
+      desc: t("plan.mistakes.desc"),
+      href: "/review",
+    },
+    {
+      icon: GraduationCap,
+      title: t("plan.mock.title"),
+      desc: t("plan.mock.desc"),
+      href: "/mock",
+    },
+  ];
 
-function DailyPlan() {
-  const doneCount = plan.filter((p) => p.done).length;
   return (
     <section className="rounded-2xl border border-border bg-card p-6">
       <div className="flex items-start justify-between mb-5">
         <div>
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-            <Clock className="w-3 h-3" /> Today · Tue, Feb 27
+          <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+            {t("plan.sub")}
           </div>
-          <h2 className="mt-1.5 font-display text-2xl">Daily training plan</h2>
-        </div>
-        <div className="text-right">
-          <div className="text-xs text-muted-foreground">Completed</div>
-          <div className="font-display text-2xl tabular-nums">
-            {doneCount}<span className="text-muted-foreground text-lg">/{plan.length}</span>
-          </div>
+          <h2 className="mt-1.5 font-display text-2xl">{t("plan.title")}</h2>
         </div>
       </div>
 
-      <div className="divide-y divide-border">
-        {plan.map((item) => (
-          <div
-            key={item.id}
-            className={`group flex items-center gap-4 py-3 -mx-2 px-2 rounded-md hover:bg-accent transition-colors cursor-pointer ${
-              item.accent ? "" : ""
+      <div className="grid gap-3 sm:grid-cols-2">
+        {items.map((it) => (
+          <a
+            key={it.title}
+            href={it.href}
+            className={`group flex items-center gap-4 p-4 rounded-xl border transition ${
+              it.accent
+                ? "bg-brand-soft border-brand/30 hover:border-brand/60"
+                : "border-border hover:border-foreground/30 bg-background/40"
             }`}
           >
-            <button className="shrink-0">
-              {item.done ? (
-                <CheckCircle2 className="w-5 h-5 text-brand fill-brand/15" />
-              ) : (
-                <Circle className="w-5 h-5 text-muted-foreground/40 group-hover:text-foreground transition" />
-              )}
-            </button>
             <div
-              className={`w-9 h-9 rounded-md grid place-items-center shrink-0 ${
-                item.accent
-                  ? "bg-brand text-brand-foreground"
-                  : "bg-muted text-foreground"
+              className={`w-10 h-10 rounded-lg grid place-items-center shrink-0 ${
+                it.accent ? "bg-foreground text-background" : "bg-muted text-foreground"
               }`}
             >
-              <item.icon className="w-4 h-4" />
+              <it.icon className="w-4 h-4" />
             </div>
             <div className="min-w-0 flex-1">
-              <div
-                className={`text-sm font-medium truncate ${
-                  item.done ? "text-muted-foreground line-through" : ""
-                }`}
-              >
-                {item.title}
-              </div>
-              <div className="text-xs text-muted-foreground mt-0.5">{item.meta}</div>
+              <div className="text-sm font-medium truncate">{it.title}</div>
+              <div className="text-xs text-muted-foreground mt-0.5 truncate">{it.desc}</div>
             </div>
-            <span className="hidden sm:inline text-[10px] uppercase tracking-wider text-muted-foreground px-2 py-0.5 rounded border border-border">
-              {item.tag}
+            <span className="inline-flex items-center gap-1 text-xs font-medium">
+              {t("plan.cta")}
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </span>
-            <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition" />
-          </div>
+          </a>
         ))}
       </div>
-
-      <button className="mt-5 w-full h-10 rounded-lg border border-border text-sm font-medium hover:bg-accent transition flex items-center justify-center gap-2">
-        Continue where you left off <ArrowRight className="w-4 h-4" />
-      </button>
     </section>
   );
 }
@@ -257,15 +250,16 @@ const weekData = [3, 5, 2, 6, 4, 7, 5];
 const days = ["M", "T", "W", "T", "F", "S", "S"];
 
 function ProgressCard() {
+  const { t } = useI18n();
   const max = Math.max(...weekData);
   return (
     <section className="rounded-2xl border border-border bg-card p-6">
       <div className="flex items-start justify-between mb-5">
         <div>
           <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
-            <TrendingUp className="w-3 h-3" /> This week
+            <TrendingUp className="w-3 h-3" /> {t("progress.thisWeek")}
           </div>
-          <h2 className="mt-1.5 font-display text-2xl">Progress</h2>
+          <h2 className="mt-1.5 font-display text-2xl">{t("progress.title")}</h2>
         </div>
         <span className="text-xs text-brand font-medium bg-brand-soft/60 px-2 py-1 rounded-md">
           +0.3 band
@@ -285,9 +279,7 @@ function ProgressCard() {
             </div>
             <span
               className={`text-[10px] ${
-                i === weekData.length - 1
-                  ? "text-foreground font-semibold"
-                  : "text-muted-foreground"
+                i === weekData.length - 1 ? "text-foreground font-semibold" : "text-muted-foreground"
               }`}
             >
               {days[i]}
@@ -297,9 +289,9 @@ function ProgressCard() {
       </div>
 
       <div className="mt-5 grid grid-cols-3 gap-3">
-        <Metric label="Minutes" value="182" sub="this week" />
-        <Metric label="Sessions" value="9" sub="4 mock · 5 drill" />
-        <Metric label="Streak" value="12" sub="days" />
+        <Metric label={t("progress.minutes")} value="182" sub={t("progress.minutesSub")} />
+        <Metric label={t("progress.sessions")} value="9" sub={t("progress.sessionsSub")} />
+        <Metric label={t("progress.streak")} value="12" sub={t("progress.days")} />
       </div>
     </section>
   );
@@ -308,79 +300,9 @@ function ProgressCard() {
 function Metric({ label, value, sub }: { label: string; value: string; sub: string }) {
   return (
     <div>
-      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </div>
+      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="mt-1 font-display text-2xl tabular-nums">{value}</div>
       <div className="text-[11px] text-muted-foreground">{sub}</div>
-    </div>
-  );
-}
-
-/* --------------------------- Feature cards ----------------------------- */
-
-function FeatureCards() {
-  return (
-    <div className="grid gap-4 md:grid-cols-3">
-      <FeatureCard
-        icon={GraduationCap}
-        title="Mock Test"
-        desc="Full 14-minute simulation with an AI examiner. Real timing, real pressure."
-        cta="Start test"
-        primary
-      />
-      <FeatureCard
-        icon={Mic}
-        title="Speaking Practice"
-        desc="Drill Part 1, 2, or 3 by topic. Get corrections and better phrasings in real time."
-        cta="Pick a topic"
-      />
-      <FeatureCard
-        icon={RotateCcw}
-        title="Review Center"
-        desc="Mistakes, vocabulary, and spaced-repetition flashcards — all in one place."
-        cta="Open review"
-      />
-    </div>
-  );
-}
-
-function FeatureCard({
-  icon: Icon,
-  title,
-  desc,
-  cta,
-  primary,
-}: {
-  icon: typeof Mic;
-  title: string;
-  desc: string;
-  cta: string;
-  primary?: boolean;
-}) {
-  return (
-    <div
-      className={`group relative rounded-2xl border p-5 flex flex-col overflow-hidden transition ${
-        primary
-          ? "bg-brand-soft border-brand/30 hover:border-brand/60"
-          : "bg-card border-border hover:border-foreground/30"
-      }`}
-    >
-      <div
-        className={`w-9 h-9 rounded-md grid place-items-center mb-4 ${
-          primary ? "bg-foreground text-background" : "bg-muted text-foreground"
-        }`}
-      >
-        <Icon className="w-4 h-4" />
-      </div>
-      <h3 className="font-display text-xl">{title}</h3>
-      <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed flex-1">
-        {desc}
-      </p>
-      <div className="mt-4 flex items-center justify-between text-sm font-medium">
-        <span>{cta}</span>
-        <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-      </div>
     </div>
   );
 }
@@ -389,11 +311,7 @@ function FeatureCard({
 
 const mistakes = [
   { wrong: "I very like it", right: "I like it a lot", tag: "Grammar" },
-  {
-    wrong: "In nowadays society",
-    right: "In today's society",
-    tag: "Collocation",
-  },
+  { wrong: "In nowadays society", right: "In today's society", tag: "Collocation" },
   { wrong: "More better", right: "Much better", tag: "Grammar" },
 ];
 
@@ -404,32 +322,28 @@ const vocab = [
 ];
 
 function ReviewSnapshot() {
+  const { t } = useI18n();
   return (
     <section className="grid gap-4 lg:grid-cols-2">
       <div className="rounded-2xl border border-border bg-card p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              Mistakes notebook
+              {t("review.mistakesTitle")}
             </div>
-            <h3 className="mt-1 font-display text-xl">Fix these next</h3>
+            <h3 className="mt-1 font-display text-xl">{t("review.mistakesSub")}</h3>
           </div>
-          <button className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
-            All 42 <ArrowRight className="w-3 h-3" />
-          </button>
+          <a href="/review" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
+            {t("review.all")} 42 <ArrowRight className="w-3 h-3" />
+          </a>
         </div>
         <ul className="space-y-3">
           {mistakes.map((m, i) => (
-            <li
-              key={i}
-              className="group flex items-start gap-3 py-2 border-b border-border last:border-0"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="text-sm">
-                  <span className="line-through text-muted-foreground">{m.wrong}</span>{" "}
-                  <ArrowRight className="inline w-3 h-3 mx-1 text-muted-foreground" />{" "}
-                  <span className="font-medium text-foreground">{m.right}</span>
-                </div>
+            <li key={i} className="flex items-start gap-3 py-2 border-b border-border last:border-0">
+              <div className="flex-1 min-w-0 text-sm">
+                <span className="line-through text-muted-foreground">{m.wrong}</span>
+                <ArrowRight className="inline w-3 h-3 mx-1 text-muted-foreground" />
+                <span className="font-medium">{m.right}</span>
               </div>
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground px-1.5 py-0.5 rounded border border-border shrink-0">
                 {m.tag}
@@ -443,20 +357,17 @@ function ReviewSnapshot() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
-              Vocabulary notebook
+              {t("review.vocabTitle")}
             </div>
-            <h3 className="mt-1 font-display text-xl">New this week</h3>
+            <h3 className="mt-1 font-display text-xl">{t("review.vocabSub")}</h3>
           </div>
-          <button className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
-            Flashcards <ArrowRight className="w-3 h-3" />
-          </button>
+          <a href="/review" className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1">
+            {t("review.flashcards")} <ArrowRight className="w-3 h-3" />
+          </a>
         </div>
         <ul className="space-y-3">
           {vocab.map((v, i) => (
-            <li
-              key={i}
-              className="flex items-baseline gap-3 py-2 border-b border-border last:border-0"
-            >
+            <li key={i} className="flex items-baseline gap-3 py-2 border-b border-border last:border-0">
               <span className="font-medium">{v.word}</span>
               <span className="text-[10px] italic text-muted-foreground">{v.pos}</span>
               <span className="text-sm text-muted-foreground truncate">{v.gloss}</span>
@@ -471,13 +382,14 @@ function ReviewSnapshot() {
 /* ------------------------------- Page ---------------------------------- */
 
 function Dashboard() {
+  const { t } = useI18n();
   return (
-    <AppShell crumb="Home">
+    <AppShell crumb={t("home.crumb")}>
       <div className="flex items-baseline justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">Good morning, Lin</p>
+          <p className="text-sm text-muted-foreground">{t("home.greeting")}</p>
           <h1 className="font-display text-4xl tracking-tight">
-            Let's close the gap to <span className="text-brand">Band 8</span>.
+            {t("home.headlineA")} <span className="text-brand">{t("home.headlineB")}</span>.
           </h1>
         </div>
       </div>
@@ -485,14 +397,11 @@ function Dashboard() {
       <HeroCard />
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <DailyPlan />
+        <QuickActions />
         <ProgressCard />
       </div>
-
-      <FeatureCards />
 
       <ReviewSnapshot />
     </AppShell>
   );
 }
-
