@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   GraduationCap,
@@ -6,6 +6,7 @@ import {
   Clock,
   Mic,
   ArrowRight,
+  ArrowLeft,
   CheckCircle2,
   Shuffle,
   Square,
@@ -20,23 +21,22 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
-import { TopicDrill } from "@/components/topic-drill";
 import { useI18n, type Lang } from "@/lib/i18n";
 
-export const Route = createFileRoute("/mock")({
+export const Route = createFileRoute("/mock/full")({
   head: () => ({
     meta: [
-      { title: "Mock Test · Cadence IELTS" },
+      { title: "Full Mock Test · Cadence IELTS" },
       {
         name: "description",
         content:
           "Full IELTS speaking mock test with an AI examiner — real timing, real pressure, instant band feedback.",
       },
-      { property: "og:title", content: "Mock Test — Cadence" },
+      { property: "og:title", content: "Full Mock — Cadence" },
       { property: "og:description", content: "Simulate the full IELTS speaking test with an AI examiner." },
     ],
   }),
-  component: MockPage,
+  component: FullMockPage,
 });
 
 type Topic = { id: string; icon: LucideIcon; en: string; zh: string; sample: { en: string; zh: string } };
@@ -65,7 +65,7 @@ function sample(lang: Lang, topic: Topic) {
   return lang === "zh" ? topic.sample.zh : topic.sample.en;
 }
 
-function MockPage() {
+function FullMockPage() {
   const { t, lang } = useI18n();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
@@ -78,9 +78,15 @@ function MockPage() {
   };
 
   return (
-    <AppShell crumb={t("mock.crumb")}>
+    <AppShell crumb={`${t("mock.crumb")} · ${lang === "zh" ? "全真模考" : "Full Mock"}`}>
       <div>
-        <p className="text-sm text-muted-foreground">{t("mock.eyebrow")}</p>
+        <Link
+          to="/mock"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="w-3 h-3" /> {lang === "zh" ? "返回模拟考试" : "Back to Mock Test"}
+        </Link>
+        <p className="mt-3 text-sm text-muted-foreground">{t("mock.eyebrow")}</p>
         <h1 className="font-display text-4xl tracking-tight">
           <span className="text-brand">{t("mock.headline")}</span>
         </h1>
@@ -205,8 +211,6 @@ function MockPage() {
           })}
         </div>
       </section>
-
-      <TopicDrill />
 
       <section className="rounded-2xl border border-border bg-card p-6">
         <div className="flex items-center justify-between mb-4">

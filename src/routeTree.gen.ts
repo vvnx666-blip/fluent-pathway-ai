@@ -9,24 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ReviewRouteImport } from './routes/review'
 import { Route as PracticeRouteImport } from './routes/practice'
-import { Route as MockRouteImport } from './routes/mock'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ReviewIndexRouteImport } from './routes/review.index'
+import { Route as MockIndexRouteImport } from './routes/mock.index'
+import { Route as ReviewVocabularyRouteImport } from './routes/review.vocabulary'
+import { Route as ReviewMistakesRouteImport } from './routes/review.mistakes'
+import { Route as ReviewFlashcardsRouteImport } from './routes/review.flashcards'
+import { Route as MockFullRouteImport } from './routes/mock.full'
+import { Route as MockDrillRouteImport } from './routes/mock.drill'
 
-const ReviewRoute = ReviewRouteImport.update({
-  id: '/review',
-  path: '/review',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PracticeRoute = PracticeRouteImport.update({
   id: '/practice',
   path: '/practice',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MockRoute = MockRouteImport.update({
-  id: '/mock',
-  path: '/mock',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -34,62 +29,131 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReviewIndexRoute = ReviewIndexRouteImport.update({
+  id: '/review/',
+  path: '/review/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MockIndexRoute = MockIndexRouteImport.update({
+  id: '/mock/',
+  path: '/mock/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewVocabularyRoute = ReviewVocabularyRouteImport.update({
+  id: '/review/vocabulary',
+  path: '/review/vocabulary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewMistakesRoute = ReviewMistakesRouteImport.update({
+  id: '/review/mistakes',
+  path: '/review/mistakes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewFlashcardsRoute = ReviewFlashcardsRouteImport.update({
+  id: '/review/flashcards',
+  path: '/review/flashcards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MockFullRoute = MockFullRouteImport.update({
+  id: '/mock/full',
+  path: '/mock/full',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MockDrillRoute = MockDrillRouteImport.update({
+  id: '/mock/drill',
+  path: '/mock/drill',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/mock': typeof MockRoute
   '/practice': typeof PracticeRoute
-  '/review': typeof ReviewRoute
+  '/mock/drill': typeof MockDrillRoute
+  '/mock/full': typeof MockFullRoute
+  '/review/flashcards': typeof ReviewFlashcardsRoute
+  '/review/mistakes': typeof ReviewMistakesRoute
+  '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/mock/': typeof MockIndexRoute
+  '/review/': typeof ReviewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/mock': typeof MockRoute
   '/practice': typeof PracticeRoute
-  '/review': typeof ReviewRoute
+  '/mock/drill': typeof MockDrillRoute
+  '/mock/full': typeof MockFullRoute
+  '/review/flashcards': typeof ReviewFlashcardsRoute
+  '/review/mistakes': typeof ReviewMistakesRoute
+  '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/mock': typeof MockIndexRoute
+  '/review': typeof ReviewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/mock': typeof MockRoute
   '/practice': typeof PracticeRoute
-  '/review': typeof ReviewRoute
+  '/mock/drill': typeof MockDrillRoute
+  '/mock/full': typeof MockFullRoute
+  '/review/flashcards': typeof ReviewFlashcardsRoute
+  '/review/mistakes': typeof ReviewMistakesRoute
+  '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/mock/': typeof MockIndexRoute
+  '/review/': typeof ReviewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/mock' | '/practice' | '/review'
+  fullPaths:
+    | '/'
+    | '/practice'
+    | '/mock/drill'
+    | '/mock/full'
+    | '/review/flashcards'
+    | '/review/mistakes'
+    | '/review/vocabulary'
+    | '/mock/'
+    | '/review/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/mock' | '/practice' | '/review'
-  id: '__root__' | '/' | '/mock' | '/practice' | '/review'
+  to:
+    | '/'
+    | '/practice'
+    | '/mock/drill'
+    | '/mock/full'
+    | '/review/flashcards'
+    | '/review/mistakes'
+    | '/review/vocabulary'
+    | '/mock'
+    | '/review'
+  id:
+    | '__root__'
+    | '/'
+    | '/practice'
+    | '/mock/drill'
+    | '/mock/full'
+    | '/review/flashcards'
+    | '/review/mistakes'
+    | '/review/vocabulary'
+    | '/mock/'
+    | '/review/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MockRoute: typeof MockRoute
   PracticeRoute: typeof PracticeRoute
-  ReviewRoute: typeof ReviewRoute
+  MockDrillRoute: typeof MockDrillRoute
+  MockFullRoute: typeof MockFullRoute
+  ReviewFlashcardsRoute: typeof ReviewFlashcardsRoute
+  ReviewMistakesRoute: typeof ReviewMistakesRoute
+  ReviewVocabularyRoute: typeof ReviewVocabularyRoute
+  MockIndexRoute: typeof MockIndexRoute
+  ReviewIndexRoute: typeof ReviewIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/review': {
-      id: '/review'
-      path: '/review'
-      fullPath: '/review'
-      preLoaderRoute: typeof ReviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/practice': {
       id: '/practice'
       path: '/practice'
       fullPath: '/practice'
       preLoaderRoute: typeof PracticeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mock': {
-      id: '/mock'
-      path: '/mock'
-      fullPath: '/mock'
-      preLoaderRoute: typeof MockRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -99,14 +163,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/review/': {
+      id: '/review/'
+      path: '/review'
+      fullPath: '/review/'
+      preLoaderRoute: typeof ReviewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mock/': {
+      id: '/mock/'
+      path: '/mock'
+      fullPath: '/mock/'
+      preLoaderRoute: typeof MockIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/vocabulary': {
+      id: '/review/vocabulary'
+      path: '/review/vocabulary'
+      fullPath: '/review/vocabulary'
+      preLoaderRoute: typeof ReviewVocabularyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/mistakes': {
+      id: '/review/mistakes'
+      path: '/review/mistakes'
+      fullPath: '/review/mistakes'
+      preLoaderRoute: typeof ReviewMistakesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review/flashcards': {
+      id: '/review/flashcards'
+      path: '/review/flashcards'
+      fullPath: '/review/flashcards'
+      preLoaderRoute: typeof ReviewFlashcardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mock/full': {
+      id: '/mock/full'
+      path: '/mock/full'
+      fullPath: '/mock/full'
+      preLoaderRoute: typeof MockFullRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mock/drill': {
+      id: '/mock/drill'
+      path: '/mock/drill'
+      fullPath: '/mock/drill'
+      preLoaderRoute: typeof MockDrillRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MockRoute: MockRoute,
   PracticeRoute: PracticeRoute,
-  ReviewRoute: ReviewRoute,
+  MockDrillRoute: MockDrillRoute,
+  MockFullRoute: MockFullRoute,
+  ReviewFlashcardsRoute: ReviewFlashcardsRoute,
+  ReviewMistakesRoute: ReviewMistakesRoute,
+  ReviewVocabularyRoute: ReviewVocabularyRoute,
+  MockIndexRoute: MockIndexRoute,
+  ReviewIndexRoute: ReviewIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
