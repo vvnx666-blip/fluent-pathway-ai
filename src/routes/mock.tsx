@@ -20,6 +20,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { TopicDrill } from "@/components/topic-drill";
 import { useI18n, type Lang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/mock")({
@@ -204,6 +205,8 @@ function MockPage() {
           })}
         </div>
       </section>
+
+      <TopicDrill />
 
       <section className="rounded-2xl border border-border bg-card p-6">
         <div className="flex items-center justify-between mb-4">
