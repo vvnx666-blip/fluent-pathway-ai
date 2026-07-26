@@ -184,13 +184,13 @@ function QuickActions() {
       icon: Layers,
       title: t("plan.vocab.title"),
       desc: t("plan.vocab.desc"),
-      href: "/review",
+      href: "/review/flashcards",
     },
     {
       icon: NotebookPen,
       title: t("plan.mistakes.title"),
       desc: t("plan.mistakes.desc"),
-      href: "/review",
+      href: "/review/mistakes",
     },
     {
       icon: GraduationCap,
