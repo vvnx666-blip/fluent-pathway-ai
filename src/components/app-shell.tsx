@@ -28,9 +28,9 @@ function Sidebar() {
   ];
 
   const reviewItems: { key: "shell.mistakes" | "shell.vocabulary" | "shell.flashcards"; icon: LucideIcon; count: number; href: string }[] = [
-    { key: "shell.mistakes", icon: NotebookPen, count: 42, href: "/review" },
-    { key: "shell.vocabulary", icon: BookOpen, count: 128, href: "/review" },
-    { key: "shell.flashcards", icon: Layers, count: 24, href: "/review" },
+    { key: "shell.mistakes", icon: NotebookPen, count: 42, href: "/review/mistakes" },
+    { key: "shell.vocabulary", icon: BookOpen, count: 128, href: "/review/vocabulary" },
+    { key: "shell.flashcards", icon: Layers, count: 24, href: "/review/flashcards" },
   ];
 
   return (
