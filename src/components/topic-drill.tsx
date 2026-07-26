@@ -56,7 +56,7 @@ const topics: Topic[] = [
   { id: "health", icon: Heart, en: "Health", zh: "健康", qs: 5 },
 ];
 
-const QUOTA_LEFT = 3; // mock monthly quota
+const QUOTA_LEFT: number = 3; // mock monthly quota
 
 function tx(lang: Lang, en: string, zh: string) {
   return lang === "zh" ? zh : en;
