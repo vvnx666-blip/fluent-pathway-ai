@@ -11,21 +11,34 @@ import {
   Settings,
   ChevronRight,
   Sparkles,
+  MessagesSquare,
+  AudioLines,
   type LucideIcon,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { LangToggle, useI18n } from "@/lib/i18n";
+import { ModeSwitcher, useMode } from "@/lib/mode";
 
 function Sidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const { mode } = useMode();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
 
-  const nav: { key: "nav.home" | "nav.mock" | "nav.practice" | "nav.review"; icon: LucideIcon; href: string }[] = [
-    { key: "nav.home", icon: Home, href: "/" },
-    { key: "nav.mock", icon: GraduationCap, href: "/mock" },
-    { key: "nav.practice", icon: Mic, href: "/practice" },
-    { key: "nav.review", icon: RotateCcw, href: "/review" },
-  ];
+  const nav =
+    mode === "ielts"
+      ? [
+          { label: t("nav.home"), icon: Home as LucideIcon, href: "/" },
+          { label: tx("IELTS Practice", "雅思专项训练"), icon: Mic as LucideIcon, href: "/practice" },
+          { label: tx("Mock Test", "模拟考试"), icon: GraduationCap as LucideIcon, href: "/mock" },
+          { label: t("nav.review"), icon: RotateCcw as LucideIcon, href: "/review" },
+        ]
+      : [
+          { label: t("nav.home"), icon: Home as LucideIcon, href: "/" },
+          { label: tx("Conversation", "对话练习"), icon: MessagesSquare as LucideIcon, href: "/conversation" },
+          { label: tx("Pronunciation", "发音纠正"), icon: AudioLines as LucideIcon, href: "/review/mistakes" },
+          { label: t("nav.review"), icon: RotateCcw as LucideIcon, href: "/review" },
+        ];
 
   const reviewItems: { key: "shell.mistakes" | "shell.vocabulary" | "shell.flashcards"; icon: LucideIcon; count: number; href: string }[] = [
     { key: "shell.mistakes", icon: NotebookPen, count: 42, href: "/review/mistakes" },
@@ -42,13 +55,19 @@ function Sidebar() {
           </div>
           <div className="flex flex-col leading-tight">
             <span className="text-sm font-semibold tracking-tight">Cadence</span>
-            <span className="text-[11px] text-muted-foreground">IELTS Speaking</span>
+            <span className="text-[11px] text-muted-foreground">
+              {mode === "ielts" ? tx("IELTS Speaking", "雅思口语") : tx("Everyday English", "日常口语")}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="px-4 pb-2">
         <LangToggle />
+      </div>
+
+      <div className="px-4 pb-1 pt-2">
+        <ModeSwitcher />
       </div>
 
       <nav className="mt-4 px-3 flex flex-col gap-0.5">
