@@ -14,10 +14,13 @@ import {
   Minus,
   Plus,
   Check,
+  MessagesSquare,
+  AudioLines,
   type LucideIcon,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { useI18n } from "@/lib/i18n";
+import { useMode } from "@/lib/mode";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -382,26 +385,178 @@ function ReviewSnapshot() {
 /* ------------------------------- Page ---------------------------------- */
 
 function Dashboard() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const { mode } = useMode();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+
   return (
     <AppShell crumb={t("home.crumb")}>
       <div className="flex items-baseline justify-between">
         <div>
-          <p className="text-sm text-muted-foreground">{t("home.greeting")}</p>
+          <p className="text-sm text-muted-foreground">
+            {mode === "ielts" ? t("home.greeting") : tx("Welcome back, Lin", "欢迎回来，Lin")}
+          </p>
           <h1 className="font-display text-4xl tracking-tight">
-            {t("home.headlineA")} <span className="text-brand">{t("home.headlineB")}</span>.
+            {mode === "ielts" ? (
+              <>
+                {t("home.headlineA")} <span className="text-brand">{t("home.headlineB")}</span>.
+              </>
+            ) : (
+              <>
+                {tx("Speak English", "开口说英语")}
+                <span className="text-brand">
+                  {tx(" every day.", " 每一天。")}
+                </span>
+              </>
+            )}
           </h1>
         </div>
       </div>
 
-      <HeroCard />
-
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <QuickActions />
-        <ProgressCard />
-      </div>
-
-      <ReviewSnapshot />
+      {mode === "ielts" ? (
+        <>
+          <HeroCard />
+          <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <QuickActions />
+            <ProgressCard />
+          </div>
+          <ReviewSnapshot />
+        </>
+      ) : (
+        <>
+          <DailyHero />
+          <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <DailyActions />
+            <ProgressCard />
+          </div>
+          <ReviewSnapshot />
+        </>
+      )}
     </AppShell>
+  );
+}
+
+/* --------------------------- Daily mode -------------------------------- */
+
+function DailyHero() {
+  const { lang } = useI18n();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+  return (
+    <section className="relative overflow-hidden rounded-2xl bg-foreground text-background p-8">
+      <div className="absolute inset-0 opacity-[0.06] grid-bg pointer-events-none" />
+      <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-brand/25 blur-3xl" />
+      <div className="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+        <div className="max-w-xl">
+          <div className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-background/60">
+            <MessagesSquare className="w-3 h-3" /> {tx("Today's goal", "今日目标")}
+          </div>
+          <h2 className="mt-3 font-display text-5xl md:text-6xl leading-[0.95]">
+            {tx("15 minutes,", "15 分钟，")}
+            <br />
+            <span className="text-brand">{tx("one real conversation.", "一次真实对话。")}</span>
+          </h2>
+          <p className="mt-4 text-sm text-background/70 leading-relaxed">
+            {tx(
+              "Choose a scenario, chat with your AI partner, and every mispronounced word lands in your notebook with the correct pronunciation.",
+              "选一个场景，与 AI 搭档对话，发音错误自动进入错题本，并附上正确读音。",
+            )}
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <Link
+              to="/conversation"
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-brand text-brand-foreground text-sm font-medium hover:brightness-105 transition"
+            >
+              {tx("Start conversation", "开始对话")} <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/review/mistakes"
+              className="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-background/15 text-sm font-medium hover:bg-background/5 transition"
+            >
+              <AudioLines className="w-4 h-4" /> {tx("Pronunciation review", "发音复习")}
+            </Link>
+          </div>
+        </div>
+        <div className="lg:w-80 shrink-0 grid grid-cols-2 gap-3">
+          <MiniStat label={tx("Words spoken", "开口词数")} value="1.2k" trend="+180" />
+          <MiniStat label={tx("Pron. errors", "发音错误")} value="7" trend="-3" />
+          <MiniStat label={tx("Conversations", "对话次数")} value="14" trend="+2" />
+          <MiniStat label={tx("Fluency", "流利度")} value="72" trend="+4" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DailyActions() {
+  const { lang } = useI18n();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+  const items: { icon: LucideIcon; title: string; desc: string; href: string; accent?: boolean }[] = [
+    {
+      icon: MessagesSquare,
+      title: tx("Free chat with AI", "自由对话"),
+      desc: tx("No topic. Just talk, get corrected.", "无主题，直接开口，实时纠错。"),
+      href: "/conversation",
+      accent: true,
+    },
+    {
+      icon: AudioLines,
+      title: tx("Pronunciation drill", "发音训练"),
+      desc: tx("Listen and repeat your saved errors.", "回听并复述已保存的发音错误。"),
+      href: "/review/mistakes",
+    },
+    {
+      icon: Layers,
+      title: tx("Vocabulary flashcards", "词汇闪卡"),
+      desc: tx("24 cards due today.", "今日待复习 24 张。"),
+      href: "/review/flashcards",
+    },
+    {
+      icon: Mic,
+      title: tx("Scenario roleplay", "情景对话"),
+      desc: tx("Coffee shop, interview, airport…", "咖啡店、面试、机场……"),
+      href: "/conversation",
+    },
+  ];
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-6">
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
+            {tx("Everyday practice", "日常练习")}
+          </div>
+          <h2 className="mt-1.5 font-display text-2xl">{tx("Pick one, keep the streak.", "选一项，保持连续。")}</h2>
+        </div>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {items.map((it) => (
+          <Link
+            key={it.title}
+            to={it.href}
+            className={`group flex items-center gap-4 p-4 rounded-xl border transition ${
+              it.accent
+                ? "bg-brand-soft border-brand/30 hover:border-brand/60"
+                : "border-border hover:border-foreground/30 bg-background/40"
+            }`}
+          >
+            <div
+              className={`w-10 h-10 rounded-lg grid place-items-center shrink-0 ${
+                it.accent ? "bg-foreground text-background" : "bg-muted text-foreground"
+              }`}
+            >
+              <it.icon className="w-4 h-4" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-medium truncate">{it.title}</div>
+              <div className="text-xs text-muted-foreground mt-0.5 truncate">{it.desc}</div>
+            </div>
+            <span className="inline-flex items-center gap-1 text-xs font-medium">
+              {tx("Start", "开始")}
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PracticeRouteImport } from './routes/practice'
+import { Route as ConversationRouteImport } from './routes/conversation'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReviewIndexRouteImport } from './routes/review.index'
 import { Route as MockIndexRouteImport } from './routes/mock.index'
@@ -22,6 +23,11 @@ import { Route as MockDrillRouteImport } from './routes/mock.drill'
 const PracticeRoute = PracticeRouteImport.update({
   id: '/practice',
   path: '/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConversationRoute = ConversationRouteImport.update({
+  id: '/conversation',
+  path: '/conversation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -67,6 +73,7 @@ const MockDrillRoute = MockDrillRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/conversation'
     | '/practice'
     | '/mock/drill'
     | '/mock/full'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/conversation'
     | '/practice'
     | '/mock/drill'
     | '/mock/full'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/conversation'
     | '/practice'
     | '/mock/drill'
     | '/mock/full'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConversationRoute: typeof ConversationRoute
   PracticeRoute: typeof PracticeRoute
   MockDrillRoute: typeof MockDrillRoute
   MockFullRoute: typeof MockFullRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/practice'
       fullPath: '/practice'
       preLoaderRoute: typeof PracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conversation': {
+      id: '/conversation'
+      path: '/conversation'
+      fullPath: '/conversation'
+      preLoaderRoute: typeof ConversationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConversationRoute: ConversationRoute,
   PracticeRoute: PracticeRoute,
   MockDrillRoute: MockDrillRoute,
   MockFullRoute: MockFullRoute,
