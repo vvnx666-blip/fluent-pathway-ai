@@ -78,7 +78,7 @@ function Sidebar() {
           const active = pathname === item.href;
           return (
             <Link
-              key={item.key}
+              key={item.href}
               to={item.href}
               className={`group flex items-center gap-2.5 h-8 px-2 rounded-md text-sm transition-colors ${
                 active
@@ -87,7 +87,7 @@ function Sidebar() {
               }`}
             >
               <item.icon className="w-4 h-4" />
-              <span>{t(item.key)}</span>
+              <span>{item.label}</span>
               {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-brand" />}
             </Link>
           );
