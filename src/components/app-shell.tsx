@@ -114,25 +114,57 @@ function Sidebar() {
         ))}
       </div>
 
-      <div className="mt-auto p-3 space-y-2">
-        <div className="rounded-lg border border-border bg-background p-3">
-          <div className="flex items-center gap-2 text-xs font-medium">
-            <Sparkles className="w-3.5 h-3.5 text-brand" />
-            {t("shell.freePlan")}
-          </div>
-          <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed">
-            {t("shell.freePlanDesc")}
-          </p>
-          <button className="mt-2 w-full h-7 rounded-md bg-foreground text-background text-xs font-medium hover:opacity-90 transition">
-            {t("shell.upgrade")}
-          </button>
-        </div>
-        <button className="flex items-center gap-2 w-full h-8 px-2 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-foreground">
-          <Settings className="w-4 h-4" />
-          {t("shell.settings")}
-        </button>
-      </div>
+      <PlanCard />
     </aside>
+  );
+}
+
+function PlanCard() {
+  const { t, lang } = useI18n();
+  const { plan } = usePlan();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+  const isPro = plan.tier === "pro";
+  const isPaid = plan.tier !== "free";
+  return (
+    <div className="mt-auto p-3 space-y-2">
+      <div
+        className={`relative overflow-hidden rounded-lg border p-3 ${
+          isPro
+            ? "bg-foreground text-background border-transparent"
+            : isPaid
+            ? "bg-brand-soft border-brand/30"
+            : "bg-background border-border"
+        }`}
+      >
+        {isPro && <div className="absolute -right-8 -top-8 w-24 h-24 rounded-full bg-brand/30 blur-2xl pointer-events-none" />}
+        <div className="relative">
+          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider opacity-70">
+            <Sparkles className="w-3 h-3" />
+            {tx("Current plan", "当前套餐")}
+          </div>
+          <div className="mt-0.5 text-sm font-semibold">
+            {lang === "zh" ? plan.nameZh : plan.name}
+          </div>
+          <div className={`text-[11px] mt-0.5 ${isPro ? "text-background/60" : "text-muted-foreground"}`}>
+            {plan.price} · {tx(plan.cadence, plan.cadenceZh)}
+          </div>
+          <Link
+            to="/pricing"
+            className={`mt-2 inline-flex w-full h-7 items-center justify-center rounded-md text-xs font-medium transition ${
+              isPro
+                ? "bg-brand text-brand-foreground hover:brightness-105"
+                : "bg-foreground text-background hover:opacity-90"
+            }`}
+          >
+            {isPaid ? tx("Switch plan", "切换套餐") : t("shell.upgrade")}
+          </Link>
+        </div>
+      </div>
+      <button className="flex items-center gap-2 w-full h-8 px-2 rounded-md text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-foreground">
+        <Settings className="w-4 h-4" />
+        {t("shell.settings")}
+      </button>
+    </div>
   );
 }
 
