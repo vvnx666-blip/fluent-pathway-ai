@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { GraduationCap, Sparkles, ArrowUpRight, Clock, Target } from "lucide-react";
 import { useState, type ComponentType } from "react";
 import { AppShell } from "@/components/app-shell";
@@ -202,5 +202,3 @@ function HubCard({
   );
 }
 
-// keep a Link import compat: TS unused warning avoidance
-void Link;
