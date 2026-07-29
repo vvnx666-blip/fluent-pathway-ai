@@ -383,7 +383,58 @@ function ReviewSnapshot() {
   );
 }
 
+function QuotaStrip() {
+  const { lang } = useI18n();
+  const { plan, quotas } = usePlan();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+  const items = [
+    { label: tx("Mocks", "模考"), remaining: quotas.mock, total: quotas.mockTotal, tone: "brand" as const },
+    { label: tx("Drills", "专题"), remaining: quotas.drill, total: quotas.drillTotal, tone: "violet" as const },
+    { label: tx("Analyses", "分析"), remaining: quotas.analysis, total: quotas.analysisTotal, tone: "neutral" as const },
+    { label: tx("Chat min", "陪练分钟"), remaining: quotas.practiceMinutes, total: quotas.practiceMinutesTotal, tone: "neutral" as const },
+  ];
+  return (
+    <section className="rounded-xl border border-border bg-card px-5 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div className="flex items-center gap-4 flex-wrap">
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          {tx("Real quotas · ", "真实配额 · ")}
+          <span className="text-foreground font-medium">{lang === "zh" ? plan.nameZh : plan.name}</span>
+        </div>
+        <div className="h-4 w-px bg-border" />
+        {items.map((it) => {
+          const empty = it.remaining <= 0;
+          return (
+            <div key={it.label} className="flex items-center gap-1.5 text-xs">
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  empty
+                    ? "bg-destructive"
+                    : it.tone === "brand"
+                    ? "bg-brand"
+                    : it.tone === "violet"
+                    ? "bg-[oklch(0.65_0.18_290)]"
+                    : "bg-foreground"
+                }`}
+              />
+              <span className="text-muted-foreground">{it.label}</span>
+              <span className="tabular-nums font-medium">
+                {it.remaining}
+                <span className="text-muted-foreground/70">/{it.total}</span>
+              </span>
+            </div>
+          );
+        })}
+      </div>
+      <Link to="/pricing" className="text-xs font-medium text-foreground inline-flex items-center gap-1 hover:underline">
+        {tx("Manage plan", "管理套餐")} <ArrowRight className="w-3 h-3" />
+      </Link>
+    </section>
+  );
+}
+
 /* ------------------------------- Page ---------------------------------- */
+
+
 
 function Dashboard() {
   const { t, lang } = useI18n();
