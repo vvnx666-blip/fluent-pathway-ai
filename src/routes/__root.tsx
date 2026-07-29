@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "../lib/i18n";
 import { ModeProvider } from "../lib/mode";
+import { PlanProvider } from "../lib/plan";
 
 
 function NotFoundComponent() {
