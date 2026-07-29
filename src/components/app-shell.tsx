@@ -18,6 +18,7 @@ import {
 import type { ReactNode } from "react";
 import { LangToggle, useI18n } from "@/lib/i18n";
 import { ModeSwitcher, useMode } from "@/lib/mode";
+import { usePlan } from "@/lib/plan";
 
 function Sidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
