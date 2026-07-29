@@ -21,6 +21,7 @@ import {
 import { AppShell } from "@/components/app-shell";
 import { useI18n } from "@/lib/i18n";
 import { useMode } from "@/lib/mode";
+import { usePlan } from "@/lib/plan";
 
 export const Route = createFileRoute("/")({
   head: () => ({
