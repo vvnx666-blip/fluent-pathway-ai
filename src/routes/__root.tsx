@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { I18nProvider } from "../lib/i18n";
 import { ModeProvider } from "../lib/mode";
+import { PlanProvider } from "../lib/plan";
 
 
 function NotFoundComponent() {
@@ -129,8 +130,10 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <ModeProvider>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
+          <PlanProvider>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </PlanProvider>
         </ModeProvider>
       </I18nProvider>
     </QueryClientProvider>

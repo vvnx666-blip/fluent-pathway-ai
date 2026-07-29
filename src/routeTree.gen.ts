@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as ConversationRouteImport } from './routes/conversation'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +21,11 @@ import { Route as ReviewFlashcardsRouteImport } from './routes/review.flashcards
 import { Route as MockFullRouteImport } from './routes/mock.full'
 import { Route as MockDrillRouteImport } from './routes/mock.drill'
 
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PracticeRoute = PracticeRouteImport.update({
   id: '/practice',
   path: '/practice',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
+  '/pricing': typeof PricingRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
+  '/pricing': typeof PricingRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
+  '/pricing': typeof PricingRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/conversation'
     | '/practice'
+    | '/pricing'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/conversation'
     | '/practice'
+    | '/pricing'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/conversation'
     | '/practice'
+    | '/pricing'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ConversationRoute: typeof ConversationRoute
   PracticeRoute: typeof PracticeRoute
+  PricingRoute: typeof PricingRoute
   MockDrillRoute: typeof MockDrillRoute
   MockFullRoute: typeof MockFullRoute
   ReviewFlashcardsRoute: typeof ReviewFlashcardsRoute
@@ -162,6 +175,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/practice': {
       id: '/practice'
       path: '/practice'
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ConversationRoute: ConversationRoute,
   PracticeRoute: PracticeRoute,
+  PricingRoute: PricingRoute,
   MockDrillRoute: MockDrillRoute,
   MockFullRoute: MockFullRoute,
   ReviewFlashcardsRoute: ReviewFlashcardsRoute,

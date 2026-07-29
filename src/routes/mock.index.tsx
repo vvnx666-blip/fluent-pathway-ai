@@ -1,7 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { GraduationCap, Sparkles, ArrowUpRight, Clock, Target } from "lucide-react";
+import { useState, type ComponentType } from "react";
 import { AppShell } from "@/components/app-shell";
 import { useI18n } from "@/lib/i18n";
+import { usePlan } from "@/lib/plan";
+import { Paywall } from "@/components/paywall";
 
 export const Route = createFileRoute("/mock/")({
   head: () => ({
@@ -21,7 +24,19 @@ export const Route = createFileRoute("/mock/")({
 
 function MockHub() {
   const { t, lang } = useI18n();
+  const { quotas } = usePlan();
+  const navigate = useNavigate();
   const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+  const [paywall, setPaywall] = useState<"mock" | "drill" | null>(null);
+
+  const goMock = () => {
+    if (quotas.mock <= 0) setPaywall("mock");
+    else navigate({ to: "/mock/full" });
+  };
+  const goDrill = () => {
+    if (quotas.drill <= 0) setPaywall("drill");
+    else navigate({ to: "/mock/drill" });
+  };
 
   return (
     <AppShell crumb={t("mock.crumb")}>
@@ -34,7 +49,7 @@ function MockHub() {
 
       <section className="grid gap-4 md:grid-cols-2">
         <HubCard
-          to="/mock/full"
+          onClick={goMock}
           icon={GraduationCap}
           eyebrow={tx("Full Mock", "全真模考")}
           title={tx("14-minute AI examiner", "14 分钟 AI 考官")}
@@ -46,48 +61,64 @@ function MockHub() {
             { icon: Clock, label: tx("~ 14 minutes", "约 14 分钟") },
             { icon: Target, label: tx("Full band report", "完整分数报告") },
           ]}
+          quota={{
+            remaining: quotas.mock,
+            total: quotas.mockTotal,
+            label: tx("this cycle", "本周期"),
+          }}
           accent
         />
         <HubCard
-          to="/mock/drill"
+          onClick={goDrill}
           icon={Sparkles}
           eyebrow={tx("Topic Drill", "专题训练")}
           title={tx("One Part, one theme", "单 Part 单主题")}
           desc={tx(
-            "Pick a Part and a topic. Practice unlimited, or turn on AI grading for detailed feedback.",
-            "选一个 Part 与话题：可无限练习，或开启 AI 评分获得详细反馈。",
+            "Pick a Part and a topic. 3–5 minutes · costs less per session.",
+            "选一个 Part 与话题：3–5 分钟 · 每次消耗更少。",
           )}
           meta={[
             { icon: Clock, label: tx("~ 3–5 minutes", "约 3–5 分钟") },
             { icon: Sparkles, label: tx("Optional AI grade", "可选 AI 评分") },
           ]}
+          quota={{
+            remaining: quotas.drill,
+            total: quotas.drillTotal,
+            label: tx("this cycle", "本周期"),
+          }}
         />
       </section>
+
+      <Paywall open={paywall !== null} onClose={() => setPaywall(null)} quota={paywall ?? "mock"} />
     </AppShell>
   );
 }
 
 function HubCard({
-  to,
+  onClick,
   icon: Icon,
   eyebrow,
   title,
   desc,
   meta,
+  quota,
   accent,
 }: {
-  to: string;
-  icon: React.ComponentType<{ className?: string }>;
+  onClick: () => void;
+  icon: ComponentType<{ className?: string }>;
   eyebrow: string;
   title: string;
   desc: string;
-  meta: { icon: React.ComponentType<{ className?: string }>; label: string }[];
+  meta: { icon: ComponentType<{ className?: string }>; label: string }[];
+  quota: { remaining: number; total: number; label: string };
   accent?: boolean;
 }) {
+  const empty = quota.remaining <= 0;
+  const low = !empty && quota.remaining <= 1;
   return (
-    <Link
-      to={to}
-      className={`group relative overflow-hidden rounded-2xl border p-6 transition ${
+    <button
+      onClick={onClick}
+      className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition ${
         accent
           ? "bg-foreground text-background border-transparent hover:brightness-110"
           : "bg-card border-border hover:border-foreground/30"
@@ -105,11 +136,30 @@ function HubCard({
           >
             <Icon className="w-5 h-5" />
           </div>
-          <ArrowUpRight
-            className={`w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
-              accent ? "text-background/70" : "text-muted-foreground"
-            }`}
-          />
+          <div className="flex items-center gap-2">
+            <span
+              className={`text-[10px] uppercase tracking-wider px-2 py-1 rounded-full border ${
+                empty
+                  ? "border-destructive/50 text-destructive bg-destructive/10"
+                  : low
+                  ? accent
+                    ? "border-brand/50 text-brand bg-brand/10"
+                    : "border-brand/40 text-brand bg-brand-soft"
+                  : accent
+                  ? "border-background/20 text-background/80"
+                  : "border-border text-muted-foreground"
+              }`}
+            >
+              {empty
+                ? "0 left"
+                : `${quota.remaining}/${quota.total} left`}
+            </span>
+            <ArrowUpRight
+              className={`w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
+                accent ? "text-background/70" : "text-muted-foreground"
+              }`}
+            />
+          </div>
         </div>
         <div
           className={`mt-5 text-[11px] uppercase tracking-wider ${
@@ -138,7 +188,17 @@ function HubCard({
             </span>
           ))}
         </div>
+        {empty && (
+          <div
+            className={`mt-4 text-[11px] ${
+              accent ? "text-brand" : "text-destructive"
+            }`}
+          >
+            {"→ tap to unlock"}
+          </div>
+        )}
       </div>
-    </Link>
+    </button>
   );
 }
+
