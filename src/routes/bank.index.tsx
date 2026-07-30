@@ -68,7 +68,7 @@ function BankHome() {
             {tx("Explore the bank", "开始浏览题库")} <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
-            to="/pricing"
+            to="/bank/pro"
             className="inline-flex items-center gap-2 h-11 px-5 rounded-xl border border-border text-sm font-medium hover:border-gold/50 hover:text-gold transition"
           >
             {tx("Unlock full bank", "解锁完整题库")}

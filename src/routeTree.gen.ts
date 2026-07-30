@@ -21,6 +21,7 @@ import { Route as ReviewMistakesRouteImport } from './routes/review.mistakes'
 import { Route as ReviewFlashcardsRouteImport } from './routes/review.flashcards'
 import { Route as MockFullRouteImport } from './routes/mock.full'
 import { Route as MockDrillRouteImport } from './routes/mock.drill'
+import { Route as BankProRouteImport } from './routes/bank.pro'
 import { Route as BankPartIndexRouteImport } from './routes/bank.$part.index'
 import { Route as BankPartTopicIndexRouteImport } from './routes/bank.$part.$topic.index'
 import { Route as BankPartTopicQuestionIdRouteImport } from './routes/bank.$part.$topic.$questionId'
@@ -85,6 +86,11 @@ const MockDrillRoute = MockDrillRouteImport.update({
   path: '/mock/drill',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BankProRoute = BankProRouteImport.update({
+  id: '/bank/pro',
+  path: '/bank/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BankPartIndexRoute = BankPartIndexRouteImport.update({
   id: '/bank/$part/',
   path: '/bank/$part/',
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/bank/pro'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/bank/pro'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/bank/pro'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   ConversationRoute: typeof ConversationRoute
   PracticeRoute: typeof PracticeRoute
   PricingRoute: typeof PricingRoute
+  BankProRoute: typeof BankProRoute
   MockDrillRoute: typeof MockDrillRoute
   MockFullRoute: typeof MockFullRoute
   ReviewFlashcardsRoute: typeof ReviewFlashcardsRoute
@@ -311,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MockDrillRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bank/pro': {
+      id: '/bank/pro'
+      path: '/bank/pro'
+      fullPath: '/bank/pro'
+      preLoaderRoute: typeof BankProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bank/$part/': {
       id: '/bank/$part/'
       path: '/bank/$part'
@@ -340,6 +360,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConversationRoute: ConversationRoute,
   PracticeRoute: PracticeRoute,
   PricingRoute: PricingRoute,
+  BankProRoute: BankProRoute,
   MockDrillRoute: MockDrillRoute,
   MockFullRoute: MockFullRoute,
   ReviewFlashcardsRoute: ReviewFlashcardsRoute,

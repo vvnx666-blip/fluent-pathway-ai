@@ -125,7 +125,7 @@ export function BankSurface({ children }: { children: ReactNode }) {
                     Free User
                   </span>
                   <Link
-                    to="/pricing"
+                    to="/bank/pro"
                     className="inline-flex items-center h-8 px-3 rounded-full bg-brand text-brand-foreground text-xs font-semibold hover:brightness-110 transition"
                   >
                     {tx("Go Pro", "升级 Pro")}

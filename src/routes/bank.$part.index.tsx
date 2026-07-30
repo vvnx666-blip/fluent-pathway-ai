@@ -125,7 +125,7 @@ function TopicExplorer() {
                 )}
               </p>
               <Link
-                to="/pricing"
+                to="/bank/pro"
                 className="mt-3 inline-flex w-full h-8 items-center justify-center rounded-lg bg-gold text-[#1b1405] text-xs font-semibold hover:brightness-110 transition"
               >
                 {tx("Unlock full bank", "解锁完整题库")}

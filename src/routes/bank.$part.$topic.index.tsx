@@ -122,7 +122,7 @@ function TopicDetail() {
               </span>
             </div>
             <Link
-              to="/pricing"
+              to="/bank/pro"
               className="inline-flex items-center h-9 px-4 rounded-lg bg-gold text-[#1b1405] text-xs font-semibold hover:brightness-110 transition"
             >
               {tx("Unlock Full Question Bank", "解锁完整题库")}
@@ -193,7 +193,7 @@ function TopicDetail() {
               return (
                 <li key={q.id} style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }} className="qb-rise">
                   {locked ? (
-                    <Link to="/pricing" className="qb-card block p-5 relative">
+                    <Link to="/bank/pro" className="qb-card block p-5 relative">
                       {body}
                     </Link>
                   ) : (
@@ -224,7 +224,7 @@ function TopicDetail() {
               )}
             </p>
             <Link
-              to="/pricing"
+              to="/bank/pro"
               className="mt-5 inline-flex items-center h-10 px-6 rounded-xl bg-gold text-[#1b1405] text-sm font-semibold hover:brightness-110 transition"
             >
               {tx("Unlock Full Question Bank", "解锁完整题库")}
