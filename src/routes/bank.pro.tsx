@@ -117,9 +117,9 @@ function BankPaywall() {
               style={{ animationDelay: `${i * 80}ms` }}
               className={`qb-rise relative rounded-2xl p-7 flex flex-col transition-all duration-300 hover:-translate-y-1 ${
                 gold
-                  ? "border-2 border-gold/60 bg-card shadow-[0_30px_80px_-40px_var(--color-gold)]"
+                  ? "border-2 border-gold/60 bg-card shadow-[0_30px_80px_-40px_var(--gold)]"
                   : recommended
-                  ? "border border-brand/50 bg-card shadow-[0_30px_80px_-45px_var(--color-brand)]"
+                  ? "border border-brand/50 bg-card shadow-[0_30px_80px_-45px_var(--brand)]"
                   : "border border-border bg-card"
               }`}
             >
