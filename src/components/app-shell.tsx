@@ -6,6 +6,7 @@ import {
   Flame,
   NotebookPen,
   GraduationCap,
+  Library,
   Home,
   RotateCcw,
   Settings,
