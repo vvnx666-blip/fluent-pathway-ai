@@ -22,6 +22,7 @@ import { Route as ReviewFlashcardsRouteImport } from './routes/review.flashcards
 import { Route as MockFullRouteImport } from './routes/mock.full'
 import { Route as MockDrillRouteImport } from './routes/mock.drill'
 import { Route as BankPartIndexRouteImport } from './routes/bank.$part.index'
+import { Route as BankPartTopicIndexRouteImport } from './routes/bank.$part.$topic.index'
 
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
@@ -88,6 +89,11 @@ const BankPartIndexRoute = BankPartIndexRouteImport.update({
   path: '/bank/$part/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BankPartTopicIndexRoute = BankPartTopicIndexRouteImport.update({
+  id: '/bank/$part/$topic/',
+  path: '/bank/$part/$topic/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/mock/': typeof MockIndexRoute
   '/review/': typeof ReviewIndexRoute
   '/bank/$part/': typeof BankPartIndexRoute
+  '/bank/$part/$topic/': typeof BankPartTopicIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/mock': typeof MockIndexRoute
   '/review': typeof ReviewIndexRoute
   '/bank/$part': typeof BankPartIndexRoute
+  '/bank/$part/$topic': typeof BankPartTopicIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/mock/': typeof MockIndexRoute
   '/review/': typeof ReviewIndexRoute
   '/bank/$part/': typeof BankPartIndexRoute
+  '/bank/$part/$topic/': typeof BankPartTopicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/mock/'
     | '/review/'
     | '/bank/$part/'
+    | '/bank/$part/$topic/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/mock'
     | '/review'
     | '/bank/$part'
+    | '/bank/$part/$topic'
   id:
     | '__root__'
     | '/'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/mock/'
     | '/review/'
     | '/bank/$part/'
+    | '/bank/$part/$topic/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   MockIndexRoute: typeof MockIndexRoute
   ReviewIndexRoute: typeof ReviewIndexRoute
   BankPartIndexRoute: typeof BankPartIndexRoute
+  BankPartTopicIndexRoute: typeof BankPartTopicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BankPartIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bank/$part/$topic/': {
+      id: '/bank/$part/$topic/'
+      path: '/bank/$part/$topic'
+      fullPath: '/bank/$part/$topic/'
+      preLoaderRoute: typeof BankPartTopicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -309,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   MockIndexRoute: MockIndexRoute,
   ReviewIndexRoute: ReviewIndexRoute,
   BankPartIndexRoute: BankPartIndexRoute,
+  BankPartTopicIndexRoute: BankPartTopicIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
