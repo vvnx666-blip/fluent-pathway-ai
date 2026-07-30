@@ -15,6 +15,7 @@ import { Route as ConversationRouteImport } from './routes/conversation'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReviewIndexRouteImport } from './routes/review.index'
 import { Route as MockIndexRouteImport } from './routes/mock.index'
+import { Route as BankIndexRouteImport } from './routes/bank.index'
 import { Route as ReviewVocabularyRouteImport } from './routes/review.vocabulary'
 import { Route as ReviewMistakesRouteImport } from './routes/review.mistakes'
 import { Route as ReviewFlashcardsRouteImport } from './routes/review.flashcards'
@@ -49,6 +50,11 @@ const ReviewIndexRoute = ReviewIndexRouteImport.update({
 const MockIndexRoute = MockIndexRouteImport.update({
   id: '/mock/',
   path: '/mock/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankIndexRoute = BankIndexRouteImport.update({
+  id: '/bank/',
+  path: '/bank/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReviewVocabularyRoute = ReviewVocabularyRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/review/flashcards': typeof ReviewFlashcardsRoute
   '/review/mistakes': typeof ReviewMistakesRoute
   '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/bank/': typeof BankIndexRoute
   '/mock/': typeof MockIndexRoute
   '/review/': typeof ReviewIndexRoute
 }
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/review/flashcards': typeof ReviewFlashcardsRoute
   '/review/mistakes': typeof ReviewMistakesRoute
   '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/bank': typeof BankIndexRoute
   '/mock': typeof MockIndexRoute
   '/review': typeof ReviewIndexRoute
 }
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/review/flashcards': typeof ReviewFlashcardsRoute
   '/review/mistakes': typeof ReviewMistakesRoute
   '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/bank/': typeof BankIndexRoute
   '/mock/': typeof MockIndexRoute
   '/review/': typeof ReviewIndexRoute
 }
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/review/flashcards'
     | '/review/mistakes'
     | '/review/vocabulary'
+    | '/bank/'
     | '/mock/'
     | '/review/'
   fileRoutesByTo: FileRoutesByTo
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/review/flashcards'
     | '/review/mistakes'
     | '/review/vocabulary'
+    | '/bank'
     | '/mock'
     | '/review'
   id:
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/review/flashcards'
     | '/review/mistakes'
     | '/review/vocabulary'
+    | '/bank/'
     | '/mock/'
     | '/review/'
   fileRoutesById: FileRoutesById
@@ -169,6 +181,7 @@ export interface RootRouteChildren {
   ReviewFlashcardsRoute: typeof ReviewFlashcardsRoute
   ReviewMistakesRoute: typeof ReviewMistakesRoute
   ReviewVocabularyRoute: typeof ReviewVocabularyRoute
+  BankIndexRoute: typeof BankIndexRoute
   MockIndexRoute: typeof MockIndexRoute
   ReviewIndexRoute: typeof ReviewIndexRoute
 }
@@ -215,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/mock'
       fullPath: '/mock/'
       preLoaderRoute: typeof MockIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bank/': {
+      id: '/bank/'
+      path: '/bank'
+      fullPath: '/bank/'
+      preLoaderRoute: typeof BankIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/review/vocabulary': {
@@ -265,6 +285,7 @@ const rootRouteChildren: RootRouteChildren = {
   ReviewFlashcardsRoute: ReviewFlashcardsRoute,
   ReviewMistakesRoute: ReviewMistakesRoute,
   ReviewVocabularyRoute: ReviewVocabularyRoute,
+  BankIndexRoute: BankIndexRoute,
   MockIndexRoute: MockIndexRoute,
   ReviewIndexRoute: ReviewIndexRoute,
 }
