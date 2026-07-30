@@ -15,11 +15,16 @@ import { Route as ConversationRouteImport } from './routes/conversation'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ReviewIndexRouteImport } from './routes/review.index'
 import { Route as MockIndexRouteImport } from './routes/mock.index'
+import { Route as BankIndexRouteImport } from './routes/bank.index'
 import { Route as ReviewVocabularyRouteImport } from './routes/review.vocabulary'
 import { Route as ReviewMistakesRouteImport } from './routes/review.mistakes'
 import { Route as ReviewFlashcardsRouteImport } from './routes/review.flashcards'
 import { Route as MockFullRouteImport } from './routes/mock.full'
 import { Route as MockDrillRouteImport } from './routes/mock.drill'
+import { Route as BankProRouteImport } from './routes/bank.pro'
+import { Route as BankPartIndexRouteImport } from './routes/bank.$part.index'
+import { Route as BankPartTopicIndexRouteImport } from './routes/bank.$part.$topic.index'
+import { Route as BankPartTopicQuestionIdRouteImport } from './routes/bank.$part.$topic.$questionId'
 
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
@@ -51,6 +56,11 @@ const MockIndexRoute = MockIndexRouteImport.update({
   path: '/mock/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BankIndexRoute = BankIndexRouteImport.update({
+  id: '/bank/',
+  path: '/bank/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReviewVocabularyRoute = ReviewVocabularyRouteImport.update({
   id: '/review/vocabulary',
   path: '/review/vocabulary',
@@ -76,32 +86,62 @@ const MockDrillRoute = MockDrillRouteImport.update({
   path: '/mock/drill',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BankProRoute = BankProRouteImport.update({
+  id: '/bank/pro',
+  path: '/bank/pro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankPartIndexRoute = BankPartIndexRouteImport.update({
+  id: '/bank/$part/',
+  path: '/bank/$part/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankPartTopicIndexRoute = BankPartTopicIndexRouteImport.update({
+  id: '/bank/$part/$topic/',
+  path: '/bank/$part/$topic/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankPartTopicQuestionIdRoute = BankPartTopicQuestionIdRouteImport.update({
+  id: '/bank/$part/$topic/$questionId',
+  path: '/bank/$part/$topic/$questionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
   '/review/mistakes': typeof ReviewMistakesRoute
   '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/bank/': typeof BankIndexRoute
   '/mock/': typeof MockIndexRoute
   '/review/': typeof ReviewIndexRoute
+  '/bank/$part/': typeof BankPartIndexRoute
+  '/bank/$part/$topic/$questionId': typeof BankPartTopicQuestionIdRoute
+  '/bank/$part/$topic/': typeof BankPartTopicIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
   '/review/mistakes': typeof ReviewMistakesRoute
   '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/bank': typeof BankIndexRoute
   '/mock': typeof MockIndexRoute
   '/review': typeof ReviewIndexRoute
+  '/bank/$part': typeof BankPartIndexRoute
+  '/bank/$part/$topic/$questionId': typeof BankPartTopicQuestionIdRoute
+  '/bank/$part/$topic': typeof BankPartTopicIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,13 +149,18 @@ export interface FileRoutesById {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
   '/mock/full': typeof MockFullRoute
   '/review/flashcards': typeof ReviewFlashcardsRoute
   '/review/mistakes': typeof ReviewMistakesRoute
   '/review/vocabulary': typeof ReviewVocabularyRoute
+  '/bank/': typeof BankIndexRoute
   '/mock/': typeof MockIndexRoute
   '/review/': typeof ReviewIndexRoute
+  '/bank/$part/': typeof BankPartIndexRoute
+  '/bank/$part/$topic/$questionId': typeof BankPartTopicQuestionIdRoute
+  '/bank/$part/$topic/': typeof BankPartTopicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -124,39 +169,54 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/bank/pro'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
     | '/review/mistakes'
     | '/review/vocabulary'
+    | '/bank/'
     | '/mock/'
     | '/review/'
+    | '/bank/$part/'
+    | '/bank/$part/$topic/$questionId'
+    | '/bank/$part/$topic/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/bank/pro'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
     | '/review/mistakes'
     | '/review/vocabulary'
+    | '/bank'
     | '/mock'
     | '/review'
+    | '/bank/$part'
+    | '/bank/$part/$topic/$questionId'
+    | '/bank/$part/$topic'
   id:
     | '__root__'
     | '/'
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/bank/pro'
     | '/mock/drill'
     | '/mock/full'
     | '/review/flashcards'
     | '/review/mistakes'
     | '/review/vocabulary'
+    | '/bank/'
     | '/mock/'
     | '/review/'
+    | '/bank/$part/'
+    | '/bank/$part/$topic/$questionId'
+    | '/bank/$part/$topic/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -164,13 +224,18 @@ export interface RootRouteChildren {
   ConversationRoute: typeof ConversationRoute
   PracticeRoute: typeof PracticeRoute
   PricingRoute: typeof PricingRoute
+  BankProRoute: typeof BankProRoute
   MockDrillRoute: typeof MockDrillRoute
   MockFullRoute: typeof MockFullRoute
   ReviewFlashcardsRoute: typeof ReviewFlashcardsRoute
   ReviewMistakesRoute: typeof ReviewMistakesRoute
   ReviewVocabularyRoute: typeof ReviewVocabularyRoute
+  BankIndexRoute: typeof BankIndexRoute
   MockIndexRoute: typeof MockIndexRoute
   ReviewIndexRoute: typeof ReviewIndexRoute
+  BankPartIndexRoute: typeof BankPartIndexRoute
+  BankPartTopicQuestionIdRoute: typeof BankPartTopicQuestionIdRoute
+  BankPartTopicIndexRoute: typeof BankPartTopicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -217,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MockIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bank/': {
+      id: '/bank/'
+      path: '/bank'
+      fullPath: '/bank/'
+      preLoaderRoute: typeof BankIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/review/vocabulary': {
       id: '/review/vocabulary'
       path: '/review/vocabulary'
@@ -252,6 +324,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MockDrillRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bank/pro': {
+      id: '/bank/pro'
+      path: '/bank/pro'
+      fullPath: '/bank/pro'
+      preLoaderRoute: typeof BankProRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bank/$part/': {
+      id: '/bank/$part/'
+      path: '/bank/$part'
+      fullPath: '/bank/$part/'
+      preLoaderRoute: typeof BankPartIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bank/$part/$topic/': {
+      id: '/bank/$part/$topic/'
+      path: '/bank/$part/$topic'
+      fullPath: '/bank/$part/$topic/'
+      preLoaderRoute: typeof BankPartTopicIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bank/$part/$topic/$questionId': {
+      id: '/bank/$part/$topic/$questionId'
+      path: '/bank/$part/$topic/$questionId'
+      fullPath: '/bank/$part/$topic/$questionId'
+      preLoaderRoute: typeof BankPartTopicQuestionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -260,13 +360,18 @@ const rootRouteChildren: RootRouteChildren = {
   ConversationRoute: ConversationRoute,
   PracticeRoute: PracticeRoute,
   PricingRoute: PricingRoute,
+  BankProRoute: BankProRoute,
   MockDrillRoute: MockDrillRoute,
   MockFullRoute: MockFullRoute,
   ReviewFlashcardsRoute: ReviewFlashcardsRoute,
   ReviewMistakesRoute: ReviewMistakesRoute,
   ReviewVocabularyRoute: ReviewVocabularyRoute,
+  BankIndexRoute: BankIndexRoute,
   MockIndexRoute: MockIndexRoute,
   ReviewIndexRoute: ReviewIndexRoute,
+  BankPartIndexRoute: BankPartIndexRoute,
+  BankPartTopicQuestionIdRoute: BankPartTopicQuestionIdRoute,
+  BankPartTopicIndexRoute: BankPartTopicIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

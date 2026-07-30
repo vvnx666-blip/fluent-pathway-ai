@@ -6,6 +6,7 @@ import {
   Flame,
   NotebookPen,
   GraduationCap,
+  Library,
   Home,
   RotateCcw,
   Settings,
@@ -32,6 +33,7 @@ function Sidebar() {
           { label: t("nav.home"), icon: Home as LucideIcon, href: "/" },
           { label: tx("IELTS Practice", "雅思专项训练"), icon: Mic as LucideIcon, href: "/practice" },
           { label: tx("Mock Test", "模拟考试"), icon: GraduationCap as LucideIcon, href: "/mock" },
+          { label: tx("Question Bank", "真题题库"), icon: Library as LucideIcon, href: "/bank" },
           { label: t("nav.review"), icon: RotateCcw as LucideIcon, href: "/review" },
         ]
       : [
