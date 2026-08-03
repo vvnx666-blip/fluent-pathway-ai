@@ -467,6 +467,7 @@ function Dashboard() {
 
       {mode === "ielts" ? (
         <>
+          <FirstRunIntro />
           <HeroCard />
           <QuotaStrip />
           <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">

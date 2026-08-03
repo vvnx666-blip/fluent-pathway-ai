@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as ReportRouteImport } from './routes/report'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PracticeRouteImport } from './routes/practice'
 import { Route as ConversationRouteImport } from './routes/conversation'
@@ -30,6 +31,11 @@ import { Route as BankPartTopicQuestionIdRouteImport } from './routes/bank.$part
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportRoute = ReportRouteImport.update({
+  id: '/report',
+  path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/report': typeof ReportRoute
   '/welcome': typeof WelcomeRoute
   '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/report': typeof ReportRoute
   '/welcome': typeof WelcomeRoute
   '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/conversation': typeof ConversationRoute
   '/practice': typeof PracticeRoute
   '/pricing': typeof PricingRoute
+  '/report': typeof ReportRoute
   '/welcome': typeof WelcomeRoute
   '/bank/pro': typeof BankProRoute
   '/mock/drill': typeof MockDrillRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/report'
     | '/welcome'
     | '/bank/pro'
     | '/mock/drill'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/report'
     | '/welcome'
     | '/bank/pro'
     | '/mock/drill'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/conversation'
     | '/practice'
     | '/pricing'
+    | '/report'
     | '/welcome'
     | '/bank/pro'
     | '/mock/drill'
@@ -236,6 +248,7 @@ export interface RootRouteChildren {
   ConversationRoute: typeof ConversationRoute
   PracticeRoute: typeof PracticeRoute
   PricingRoute: typeof PricingRoute
+  ReportRoute: typeof ReportRoute
   WelcomeRoute: typeof WelcomeRoute
   BankProRoute: typeof BankProRoute
   MockDrillRoute: typeof MockDrillRoute
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/welcome'
       fullPath: '/welcome'
       preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/report': {
+      id: '/report'
+      path: '/report'
+      fullPath: '/report'
+      preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -380,6 +400,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConversationRoute: ConversationRoute,
   PracticeRoute: PracticeRoute,
   PricingRoute: PricingRoute,
+  ReportRoute: ReportRoute,
   WelcomeRoute: WelcomeRoute,
   BankProRoute: BankProRoute,
   MockDrillRoute: MockDrillRoute,
