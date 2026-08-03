@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Mic,
   Layers,
@@ -22,6 +22,7 @@ import { AppShell } from "@/components/app-shell";
 import { useI18n } from "@/lib/i18n";
 import { useMode } from "@/lib/mode";
 import { usePlan } from "@/lib/plan";
+import { readOnboarding, writeOnboarding } from "@/lib/onboarding";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -467,6 +468,7 @@ function Dashboard() {
 
       {mode === "ielts" ? (
         <>
+          <FirstRunIntro />
           <HeroCard />
           <QuotaStrip />
           <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -610,6 +612,54 @@ function DailyActions() {
           </Link>
         ))}
       </div>
+    </section>
+  );
+}
+
+/* -------------------- First-run onboarding intro (home) ------------------ */
+
+function FirstRunIntro() {
+  const { lang } = useI18n();
+  const tx = (en: string, zh: string) => (lang === "zh" ? zh : en);
+  const [state, setState] = useState<{ show: boolean; target: string }>({ show: false, target: "7.5" });
+  const [pct, setPct] = useState(0);
+
+  useEffect(() => {
+    const saved = readOnboarding();
+    if (!saved.homeIntroSeen && saved.done) {
+      setState({ show: true, target: saved.targetBand || "7.5" });
+      writeOnboarding({ homeIntroSeen: true });
+      const t = setTimeout(() => setPct(8), 400);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
+  if (!state.show) return null;
+
+  return (
+    <section className="sl-up rounded-2xl border border-border bg-card p-6">
+      <h2 className="font-display text-2xl">
+        {tx("Welcome to Speaking Lab, Lin.", "欢迎来到 Speaking Lab，Lin。")}
+      </h2>
+      <div className="mt-4 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2 sm:max-w-sm">
+        <span>{tx("Your goal", "目标")}</span>
+        <span className="text-foreground">Band {state.target}</span>
+        <span>{tx("Current", "当前")}</span>
+        <span className="text-foreground">{tx("Unknown", "未知")}</span>
+      </div>
+      <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+        <div
+          className="h-full rounded-full bg-brand transition-[width] duration-1000 ease-out"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <Link
+        to="/mock/drill"
+        className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand-soft px-4 py-2 text-sm text-brand-foreground sl-press"
+      >
+        <span className="sl-float">↑</span>
+        {tx("Start here → Complete your first Topic Drill", "从这里开始 → 完成第一次专项训练")}
+      </Link>
     </section>
   );
 }
